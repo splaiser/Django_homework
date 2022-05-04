@@ -1,7 +1,7 @@
 from django.shortcuts import render, reverse
-from requests import request
-from django.http import HttpResponse
 
+from django.http import HttpResponse
+import json
 
 DATA = {
     'omlet': {
@@ -23,9 +23,10 @@ DATA = {
 }
 
 
-def omlet_view(request):
+def calculator_view(request):
     template_name = 'calculator/index.html'
-    item = DATA.get("omlet")
+    name = request.path
+    item = DATA.get(name.replace("/", ""))
     servings = request.GET.get("servings", '1')
     for keys, values in item.items():
         item[keys] = values * int(servings)
@@ -37,31 +38,5 @@ def omlet_view(request):
     return render(request, template_name, context)
 
 
-def pasta_view(request):
-    template_name = 'calculator/index.html'
-    item = DATA.get("pasta")
-    servings = request.GET.get("servings", '1')
-    for keys, values in item.items():
-        item[keys] = values * int(servings)
-
-    context = {
-        'recipe': item,
-    }
-
-    return render(request, template_name, context)
-
-
-def buter_view(request):
-    template_name = 'calculator/index.html'
-    item = DATA.get("buter")
-    servings = request.GET.get("servings", '1')
-    for keys, values in item.items():
-        item[keys] = values * int(servings)
-
-    context = {
-        'recipe': item,
-    }
-
-    return render(request, template_name, context)
 
 
