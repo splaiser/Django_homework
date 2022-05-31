@@ -3,12 +3,8 @@ from django.db import models
 from django.db.models import ManyToManyField
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=30, verbose_name="Название")
-
-
 class Scope(models.Model):
-    tag = ManyToManyField(Tag, related_name="scopes")
+    name = models.CharField(max_length=30, verbose_name="Название")
     is_main = models.BooleanField(verbose_name='Основной раздел')
 
     class Meta:
@@ -21,7 +17,7 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     published_at = models.DateTimeField(verbose_name='Дата публикации')
     image = models.ImageField(null=True, blank=True, verbose_name='Изображение', )
-    scopes = ManyToManyField(Scope, related_name='articles')
+    scopes = ManyToManyField(Scope, related_name='articles', through='Tag')
 
     class Meta:
         verbose_name = 'Статья'
@@ -30,3 +26,8 @@ class Article(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Tag(models.Model):
+    scope = models.ForeignKey(Scope, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
