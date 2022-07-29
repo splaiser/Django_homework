@@ -30,14 +30,8 @@ class SensorView(ListAPIView):
 
 class Sensor2View(RetrieveUpdateAPIView):
     queryset = Sensor.objects.all()
-
     serializer_class = SensorSerializer
 
-    def get(self, request, *args, **kwargs):
-        sensor_id = kwargs.get('pk')
-        req = request.data
-        print(req)
-        return Response({'status': 'OK'})
 
 
 class Measurements(ListAPIView):
